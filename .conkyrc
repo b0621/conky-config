@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 conky.config = {
     alignment = 'top_right',
+    xinerama_head = 2,
     background = false,
     update_interval = 1,
     border_width = 0,
@@ -72,6 +73,9 @@ ${color grey}CPU Usage:$color $cpu% ${cpubar 6}
 ${color1}01 - 04:${color}${font} ${goto 100}${cpu cpu1}% ${goto 150}${cpu cpu2 }% ${goto 200}${cpu cpu3 }% ${goto 250}${cpu cpu4 }%
 ${color1}05 - 08:${color}${font} ${goto 100}${cpu cpu5}% ${goto 150}${cpu cpu6 }% ${goto 200}${cpu cpu7 }% ${goto 250}${cpu cpu8 }%
 ${color grey} Processes:$color $processes  ${color grey}Running:$color $running_processes
+${font DejaVu Sans Mono:italic:size=10}Temps $hr
+${font DejaVu Sans Mono:size=10}${alignc}CPU
+${alignc}0: ${exec sensors | grep Core\ 0: | cut -c16-22} 1: ${exec sensors | grep Core\ 1: | cut -c16-22} 2: ${exec sensors | grep Core\ 2: | cut -c16-22} 3: ${exec sensors | grep Core\ 3: | cut -c16-22}
 ${font DejaVu Sans Mono:italic:size=10}Battery $hr
 ${font DejaVu Sans Mono:size=10}${if_match ${battery_percent BAT0} <= 10}\
 ${goto 10}${color #FF1A21}${blink Battery:} \
@@ -79,11 +83,13 @@ $else \
 ${goto 5}${color grey}Battery: \
 $endif\
 ${goto 102}${color}${voffset 2}${battery_bar 6,195 BAT0} ${voffset -1}${goto 180}
-${battery BAT0} ${alignr}${battery_time BAT0}
+${alignc}${battery BAT0} ${alignc}${battery_time BAT0}
 ${font DejaVu Sans Mono:italic:size=10}Data $hr
 ${font DejaVu Sans Mono:size=10}${color grey}File systems:
-/ $color${fs_used /}/${fs_size /} ${fs_bar 6 /}
-${font DejaVu Sans Mono:italic:size=10}Networking $hr
+/ ${goto 75}$color${fs_used /}/${fs_size /}${goto 200}${fs_bar 6 /}
+/var ${goto 75}$color${fs_used /var}/${fs_size /var}${goto 200}${fs_bar 6 /var}
+/home ${goto 75}$color${fs_used /home}/${fs_size /home}${goto 200}${fs_bar 6 /home}
+${font DejaVu Sans Mono:italic:size=10}Networking $hr ${if_existing /sys/class/net/wlp3s0/operstate up}\
 ${font DejaVu Sans Mono:size=10}${alignc}${color white}wlp3s0 | ${wireless_essid wlp3s0}
 ${color grey}BSSID: ${color white}${alignr}${wireless_ap wlp3s0}
 ${color grey}Signal Quality (cur/max):${alignr}${color white}${wireless_link_qual wlp3s0}%/${wireless_link_qual_max wlp3s0}%
@@ -92,6 +98,13 @@ ${color grey}LAN IP: ${color white}${alignr} ${addr wlp3s0}
 ${color grey}WAN IP: ${alignr}${color white}${exec curl "http://myexternalip.com/raw"}
 Up:  ${upspeedgraph wlp3s0 20,175 ADFF2F 32CD32 -t}${color grey}${alignr}${color white}${upspeed wlp3s0}
 Down:${downspeedgraph wlp3s0 20,175 FF0000 8B0000 -t}${color grey}${alignr}${color white}${downspeed wlp3s0}
+${endif} ${if_existing /sys/class/net/enp0s25/operstate up} 
+${font DejaVu Sans Mono:size=10}${alignc}${color white}enp0s25
+${color grey}LAN IP: ${color white}${alignr} ${addr enp0s25}
+${color grey}WAN IP: ${alignr}${color white}${exec curl "http://myexternalip.com/raw"}
+Up:  ${upspeedgraph enp0s25 20,175 ADFF2F 32CD32 -t}${color grey}${alignr}${color white}${upspeed enp0s25}
+Down:${downspeedgraph enp0s25 20,175 FF0000 8B0000 -t}${color grey}${alignr}${color white}${downspeed enp0s25}
+${endif}
 ${font DejaVu Sans Mono:italic:size=10}Top $hr
 ${font DejaVu Sans Mono:size=10}${color grey}Name              PID   CPU%   MEM%
 ${color lightgrey} ${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
@@ -99,4 +112,6 @@ ${color lightgrey} ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
 ${color lightgrey} ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
 ${color lightgrey} ${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
 ${color lightgrey} ${top name 5} ${top pid 5} ${top cpu 5} ${top mem 5}
+${color lightgrey} ${top name 6} ${top pid 6} ${top cpu 6} ${top mem 6}
+
 ]]

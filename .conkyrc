@@ -89,7 +89,16 @@ ${font DejaVu Sans Mono:size=10}${color grey}File systems:
 / ${goto 75}$color${fs_used /}/${fs_size /}${goto 200}${fs_bar 6 /}
 /var ${goto 75}$color${fs_used /var}/${fs_size /var}${goto 200}${fs_bar 6 /var}
 /home ${goto 75}$color${fs_used /home}/${fs_size /home}${goto 200}${fs_bar 6 /home}
-${font DejaVu Sans Mono:italic:size=10}Networking $hr ${if_existing /sys/class/net/wlp3s0/operstate up}\
+/backup ${goto 75}$color${fs_used /mnt/backup}/${fs_size /mnt/backup}${goto 200}${fs_bar 6 /mnt/backup}
+/win7 ${goto 75}$color${fs_used /mnt/win7}/${fs_size /mnt/win7}${goto 200}${fs_bar 6 /mnt/win7}
+/nfs ${goto 75}$color${fs_used /mnt/nfs}/${fs_size /mnt/nfs}${goto 200}${fs_bar 6 /mnt/nfs}
+${font DejaVu Sans Mono:italic:size=10}Networking $hr ${if_existing /sys/class/net/enp0s25/operstate up} 
+${font DejaVu Sans Mono:size=10}${alignc}${color white}enp0s25
+${color grey}LAN IP: ${color white}${alignr} ${addr enp0s25}
+${color grey}WAN IP: ${alignr}${color white}${exec curl "http://myexternalip.com/raw"}
+Up:  ${upspeedgraph enp0s25 20,175 ADFF2F 32CD32 -t}${color grey}${alignr}${color white}${upspeed enp0s25}
+Down:${downspeedgraph enp0s25 20,175 FF0000 8B0000 -t}${color grey}${alignr}${color white}${downspeed enp0s25}
+${else} ${if_existing /sys/class/net/wlp3s0/operstate up}\
 ${font DejaVu Sans Mono:size=10}${alignc}${color white}wlp3s0 | ${wireless_essid wlp3s0}
 ${color grey}BSSID: ${color white}${alignr}${wireless_ap wlp3s0}
 ${color grey}Signal Quality (cur/max):${alignr}${color white}${wireless_link_qual wlp3s0}%/${wireless_link_qual_max wlp3s0}%
@@ -98,12 +107,6 @@ ${color grey}LAN IP: ${color white}${alignr} ${addr wlp3s0}
 ${color grey}WAN IP: ${alignr}${color white}${exec curl "http://myexternalip.com/raw"}
 Up:  ${upspeedgraph wlp3s0 20,175 ADFF2F 32CD32 -t}${color grey}${alignr}${color white}${upspeed wlp3s0}
 Down:${downspeedgraph wlp3s0 20,175 FF0000 8B0000 -t}${color grey}${alignr}${color white}${downspeed wlp3s0}
-${endif} ${if_existing /sys/class/net/enp0s25/operstate up} 
-${font DejaVu Sans Mono:size=10}${alignc}${color white}enp0s25
-${color grey}LAN IP: ${color white}${alignr} ${addr enp0s25}
-${color grey}WAN IP: ${alignr}${color white}${exec curl "http://myexternalip.com/raw"}
-Up:  ${upspeedgraph enp0s25 20,175 ADFF2F 32CD32 -t}${color grey}${alignr}${color white}${upspeed enp0s25}
-Down:${downspeedgraph enp0s25 20,175 FF0000 8B0000 -t}${color grey}${alignr}${color white}${downspeed enp0s25}
 ${endif}
 ${font DejaVu Sans Mono:italic:size=10}Top $hr
 ${font DejaVu Sans Mono:size=10}${color grey}Name              PID   CPU%   MEM%
